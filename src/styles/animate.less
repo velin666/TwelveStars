@@ -1,0 +1,115 @@
+
+
+/**
+ * @description: 动画样式
+ */
+
+ .fade-enter-active,
+ .fade-leave-active {
+   transition: background-color 0.6s ease;
+ }
+
+ .fade-enter-from,
+ .fade-leave-to {
+   background-color: rgba(0, 0, 0, 0);
+ }
+
+ .bottom-show-enter-active,
+ .bottom-show-leave-active {
+   transition: all 0.3s ease;
+ }
+
+ .bottom-show-enter-from,
+ .bottom-show-leave-to {
+   opacity: 0;
+   transform: translateY(101%);
+ }
+
+ .fade-main-enter-active,
+ .fade-main-leave-active {
+   transition: opacity 0.4s ease;
+ }
+
+ .fade-main-enter-from,
+ .fade-main-leave-to {
+   opacity: 0;
+ }
+
+ .show-up-enter-from,
+ .show-up-leave-to {
+   transform: scale(0);
+   opacity: 0;
+ }
+ .popup-enter-from,
+ .popup-leave-to {
+   opacity: 0;
+   transform: translate(-50%, -40%) scale(1);
+ }
+ .show-up-enter-active,
+ .show-up-leave-active,
+ .popup-enter-active,
+ .popup-leave-active {
+   transition: all ease 0.45s;
+ }
+
+ .tab-l-enter-active,
+ .tab-r-enter-active,
+ .tab-l-leave-active,
+ .tab-r-leave-active {
+   transition: all 0.6s;
+ }
+ .tab-l-enter-from,
+ .tab-r-leave-to {
+   opacity: 0;
+   transform: translateX(0.3rem);
+ }
+ .tab-r-enter-from,
+ .tab-l-leave-to {
+   opacity: 0;
+   transform: translateX(-0.3rem);
+ }
+ .tab-l-leave-from,
+ .tab-r-leave-from,
+ .tab-l-leave-to,
+ .tab-r-leave-to {
+   position: absolute !important;
+   left: 0;
+   top: 0;
+   z-index: 2;
+ }
+
+ // 公告上下轮播动画
+.scrollUp-enter-active,
+.scrollUp-leave-active {
+  transition: all 0.5s linear;
+}
+.scrollUp-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.scrollUp-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+// 内容缩放过渡
+.scale-switch-enter-from {
+  opacity: 0;
+  transform: scale(.8);
+}
+.scale-switch-leave-to {
+  opacity: 0;
+  transform: scale(1.2);
+}
+.scale-switch-enter-active,
+.scale-switch-leave-active {
+  transform-origin: center 1rem;
+  transition: opacity .3s, transform .3s;
+}
+
+.scale-switch-leave-to {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}

@@ -1,0 +1,25 @@
+.reward-item {
+  .flex-column;
+  align-self: flex-start;
+  position: relative;
+  color: #ab2533;
+  .img-frame {
+    .rect(0.75);
+    .flex-center;
+    .bg-normal('@/assets/bg/event-gift-bg.png');
+    position: relative;
+    > img {
+      object-fit: contain;
+      .rect(0.65);
+    }
+  }
+  .name {
+    font-family: AlibabaPuHuiTi_3_95_ExtraBold;
+    font-size: 0.12rem;
+  }
+  .value {
+    font-family: AlibabaPuHuiTi_3_65_Medium;
+    opacity: 0.6;
+    font-size: 0.1rem;
+  }
+}

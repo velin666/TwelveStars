@@ -1,0 +1,261 @@
+/**
+ * @description: 通用公共样式
+ */
+// 绝对定位居中
+.ab-center(@zIndex: 1) {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: @zIndex;
+}
+// 绝对定位水平居中
+.ab-X(@zIndex: 1) {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: @zIndex;
+}
+// 绝对定垂直平居中
+.ab-Y(@zIndex: 1) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: @zIndex;
+}
+
+// 绝对定位居中 2
+.ab2-center(@zIndex: 1) {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: @zIndex;
+}
+// 绝对定位水平居中2
+.ab2-X(@zIndex: 1) {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: @zIndex;
+}
+// 绝对定垂直平居中2
+.ab2-Y(@zIndex: 1) {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: @zIndex;
+}
+// 固定定位居中
+.fixed-center(@zIndex: 1) {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: @zIndex;
+}
+
+// 弹性布局
+// 弹性定制
+.set-flex(@jc: center, @ai: center) {
+  display: flex;
+  justify-content: @jc;
+  align-items: @ai;
+}
+// 居中
+.flex-center() {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+// 等间距（边框计算）
+.flex-around() {
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+}
+// 等间距（无边框计算）
+.flex-between() {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+}
+// 靠左
+.flex-start() {
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+}
+// 靠右
+.flex-end() {
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+}
+// 垂直分布
+.flex-column() {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+// 弹框垂直居中
+.flex-centerColumn() {
+  .flex-center;
+  flex-direction: column;
+}
+// 弹框垂直居中（定制化）
+.set-flexColumn(@jc: center, @ai: center) {
+  display: flex;
+  justify-content: @jc;
+  align-items: @ai;
+  flex-direction: column;
+}
+
+// 背景图片
+.bg-normal(@url, @size: contain) {
+  background-image: url(@url);
+  .bg-base(@size);
+}
+.bg-base(@size: contain) {
+  background-repeat: no-repeat;
+  background-size: @size;
+  background-position: center top;
+}
+
+// 三张切图背景图展示
+.setBgTopBottom(@topUrl, @topWidth, @topHeight, @bottomUrl, @bottomWidth, @bottomHeight) {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  background-image: url(@topUrl), url(@bottomUrl);
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    top center,
+    bottom center;
+  background-size:
+    @topWidth @topHeight,
+    @bottomWidth @bottomHeight;
+}
+.setBgCenter(@centerUrl, @marginTop, @marginBottom, @_left: 0rem, @_right: 0rem) {
+  position: absolute;
+  top: @marginTop - 0.02rem;
+  left: @_left;
+  right: @_right;
+  bottom: @marginBottom - 0.02rem;
+  background: url(@centerUrl) repeat;
+  background-size: 100% 100%;
+}
+// 三段式背景图展示
+//   @width: 图片宽度
+//   @top-hei: 顶图高度
+//   @under-hei: 底图高度
+//   @top-url: 顶图路径 (默认图片名: main-bg-top)
+//   @under-url: 底图路径 (默认图片名: main-bg-bottom)
+//   @center-url: 中间图路径 (默认图片名: main-bg-center)
+.tri-bg(
+  @width,
+  @top-hei,
+  @under-hei,
+  @top-url: '@/assets/bg/main-bg-top.png',
+  @center-url: '@/assets/bg/main-bg-center.png',
+  @under-url: '@/assets/bg/main-bg-bottom.png',
+  @unit: rem,
+) {
+  width: unit(@width, @unit);
+  min-height: unit(@top-hei + @under-hei, @unit);
+  background-image: url(@top-url), url(@under-url), url(@center-url);
+  background-repeat: no-repeat;
+  background-size:
+    unit(@width, @unit) unit(@top-hei, @unit),
+    unit(@width, @unit) unit(@under-hei, @unit),
+    unit(@width, @unit) calc(100% - unit((@top-hei + @under-hei - 0.02), @unit));
+  background-position:
+    center top,
+    center bottom,
+    center unit(@top-hei - 0.01, @unit);
+}
+
+// 边框背景图展示 (垂直)
+//   @url: 图片路径
+//   @width: 图片宽度
+//   @t: 上边宽度
+//   @r: 右边宽度
+//   @b: 下边宽度 (默认与上边一致)
+//   @l: 左边宽度 (默认与右边一致)
+//   @ratio: 边框倍率 (默认为2)
+.border-img-h(@url, @width, @t, @r, @b: @t, @l: @r, @ratio: 2) {
+  width: @width;
+  box-sizing: border-box;
+  border-style: solid;
+  border-image: url(@url) @t * @ratio @r * @ratio @b * @ratio @l * @ratio fill;
+  border-width: @t * 0.01rem @r * 0.01rem @b * 0.01rem @l * 0.01rem;
+}
+// 边框背景图展示 (水平)
+//   @url: 图片路径
+//   @height: 图片高度
+//   @t: 上边宽度
+//   @r: 右边宽度
+//   @b: 下边宽度 (默认与上边一致)
+//   @l: 左边宽度 (默认与右边一致)
+//   @ratio: 边框倍率 (默认为2)
+.border-img-w(@url, @height, @t, @r, @b: @t, @l: @r, @ratio: 2) {
+  height: @height;
+  box-sizing: border-box;
+  border-style: solid;
+  border-image: url(@url) @t * @ratio @r * @ratio @b * @ratio @l * @ratio fill;
+  border-width: @t * 0.01rem @r * 0.01rem @b * 0.01rem @l * 0.01rem;
+}
+.bg-style() {
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+// 方形宽高
+.rect(@len, @unit: rem) {
+  width: unit(@len, @unit);
+  height: unit(@len, @unit);
+}
+// 圆形宽高
+.round(@len, @radius: 50%, @unit: rem) {
+  border-radius: @radius;
+  width: unit(@len, @unit);
+  height: unit(@len, @unit);
+}
+// 文字溢出隐藏
+.text-overflow() {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+// 文字描边阴影
+.word-stroke(@color, @blur: 0.005rem, @move: 0.01rem) {
+  text-shadow:
+    @color @move 0 @blur,
+    @color 0-@move 0 @blur,
+    @color 0 @move @blur,
+    @color 0 0-@move @blur,
+    @color @move @move @blur,
+    @color 0-@move -@move @blur,
+    @color 0-@move @move @blur,
+    @color @move 0-@move @blur;
+}
+// 横向渐变背景
+.linear-bg(@color, @range: 50%, @deg: 90deg) {
+  background: linear-gradient(
+    @deg,
+    rgba(0, 0, 0, 0) 0%,
+    @color @range,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/**
+ * @description: 业务样式
+ */
