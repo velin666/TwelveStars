@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { reqActDate } from '@/interface/request'
 
 // 活动名称
 const { activityName = '' } = defineProps<{
@@ -71,40 +70,42 @@ const checkViChange = (): void => {
  */
 // 倒计时
 const setTimer = (): void => {
-  reqActDate(activityName).then(res => {
-    if (!res.errCode) {
-      data.time = res.data.countdown / 1000
-      clearTimeout(data.setInterTime)
-      switch (res.data.state) {
-        case 0:
-          showToast('活动未开始')
-          break
-        case 2:
-          showToast('活动已结束')
-          break
-        default:
-          break
-      }
-      if (data.time >= 1) {
-        // 初始化
-        timerOption()
-        // 开始倒计时
-        const startCount = () => {
-          data.setInterTime = setTimeout(() => {
-            if (data.time >= 1) {
-              timerOption()
-              startCount()
-            } else {
-              clearTimeout(data.setInterTime)
-            }
-          }, 1000)
-        }
-        startCount()
-      }
-    } else {
-      showToast(res.errMsg)
+  const res = {
+    data: {
+      countdown: 24 * 60 * 60 * 1000,
+      state: 1,
+    },
+  }
+  setTimeout(() => {
+    data.time = res.data.countdown / 1000
+    clearTimeout(data.setInterTime)
+    switch (res.data.state) {
+      case 0:
+        showToast('活动未开始')
+        break
+      case 2:
+        showToast('活动已结束')
+        break
+      default:
+        break
     }
-  })
+    if (data.time >= 1) {
+      // 初始化
+      timerOption()
+      // 开始倒计时
+      const startCount = () => {
+        data.setInterTime = setTimeout(() => {
+          if (data.time >= 1) {
+            timerOption()
+            startCount()
+          } else {
+            clearTimeout(data.setInterTime)
+          }
+        }, 1000)
+      }
+      startCount()
+    }
+  }, 50)
 }
 // 倒计时操作
 const timerOption = (): void => {

@@ -12,7 +12,7 @@ const router = createRouter({
       name: 'Home',
       component: () => import('@/views/Home/index.vue'),
       meta: {
-        title: '',
+        title: '十二星辰',
       },
     },
   ],

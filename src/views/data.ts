@@ -1,5 +1,5 @@
 import type { InjectionKey, Ref } from 'vue'
-import type { ActCommonGiftDTO } from './public'
+import type { ActCommonGiftDTO } from '@/interface/public'
 
 export const baseKey: InjectionKey<{
   /** tab 下标 */
