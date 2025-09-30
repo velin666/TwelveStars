@@ -17,7 +17,7 @@
     <Turnplate :stop-play="stopPlay" />
 
     <!-- 规则弹框 -->
-    <Model v-model="visible">
+    <Model v-model="visible" model="follow">
       <div class="rule-dialog">
         <img src="@/assets/text/rule-title.png" alt="" class="title" />
         <div class="rule-list">
@@ -84,7 +84,7 @@ import { GetQueryString } from '@/util'
 
 const stopPlay = ref(false)
 const { resBaseGift } = inject(baseKey)!
-const month = GetQueryString('month') as unknown as keyof typeof MONTH_VALUE
+const month = (GetQueryString('month') as unknown as keyof typeof MONTH_VALUE) || 'Sept'
 // const { month } = useRoute().query as { month: keyof typeof MONTH_VALUE }
 window.onscroll = () => {
   // 滚动条滚动时，距离顶部的距离

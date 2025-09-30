@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import { useDialog } from '@/stores/dialog'
+import { storeToRefs } from 'pinia'
 /**
  * @description: 弹框组件
  * @param {*} to 传送门落地点
@@ -47,7 +48,9 @@ const {
 }>()
 
 const emit = defineEmits(['update:modelValue'])
-const { mask, setMaskNumber, position } = $(useDialog())
+const dialogStore = useDialog()
+const { mask, position } = storeToRefs(dialogStore)
+const { setMaskNumber } = dialogStore
 const dialogAxis = ref({
   x: '0',
   y: '0',
@@ -64,20 +67,21 @@ let axis = {
 }
 watch(
   () => modelValue,
-  newVal => {
+  (newVal) => {
     setMaskNumber(
       newVal
-        ? mask.maskNumber + 1
-        : mask.maskNumber > 0
-          ? mask.maskNumber - 1
-          : 0
+        ? mask.value.maskNumber + 1
+        : mask.value.maskNumber > 0
+          ? mask.value.maskNumber - 1
+          : 0,
     )
     if (model === 'follow') {
       if (newVal) {
-        axis = position
+        const pox = position.value
+        axis = pox
           ? {
-              x: position.x,
-              y: position.y,
+              x: pox.x,
+              y: pox.y,
               scale: 0,
               opacity: 0,
             }
@@ -96,7 +100,7 @@ watch(
               scale: 1,
               opacity: 1,
             }),
-          20
+          20,
         )
       } else {
         dialogAxis.value = axis
@@ -106,7 +110,7 @@ watch(
   },
   {
     flush: 'post',
-  }
+  },
 )
 // watch(dialogRef, () => {})
 

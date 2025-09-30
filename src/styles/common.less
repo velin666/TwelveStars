@@ -248,14 +248,173 @@
 }
 // 横向渐变背景
 .linear-bg(@color, @range: 50%, @deg: 90deg) {
-  background: linear-gradient(
-    @deg,
-    rgba(0, 0, 0, 0) 0%,
-    @color @range,
-    rgba(0, 0, 0, 0) 100%
-  );
+  background: linear-gradient(@deg, rgba(0, 0, 0, 0) 0%, @color @range, rgba(0, 0, 0, 0) 100%);
 }
 
 /**
  * @description: 业务样式
  */
+
+.base-dialog() {
+  width: 3.69rem;
+  height: 4.73rem;
+  .bg-normal('@/assets/bg/base-dialog.png');
+  box-sizing: border-box;
+  padding-top: 1rem;
+  position: relative;
+  .flex-column;
+  .title {
+    .ab-X;
+    top: 0.2rem;
+  }
+  .close-icon {
+    .rect(0.44rem);
+    .ab-X;
+    bottom: -0.6rem;
+    animation: close-show 0.5s 1 0.3s both;
+    @keyframes close-show {
+      0% {
+        transform: rotate(0) scale(0);
+      }
+      100% {
+        transform: rotate(1turn) scale(1);
+      }
+    }
+  }
+}
+
+.common-dialog() {
+  background-image:
+    url('@/assets/bg/common-upper-dialog.png'), url('@/assets/bg/common-mid-dialog.png'),
+    url('@/assets/bg/common-under-dialog.png');
+  background-size:
+    3.75rem 1.46rem,
+    3.75rem calc(100% - 3.12rem),
+    3.75rem 1.68rem;
+  background-position-x: center;
+  background-position-y: top, 1.45rem, bottom;
+  background-repeat: no-repeat;
+  width: 3.75rem;
+  min-height: 3.2rem;
+  .flex-column;
+  .close-icon {
+    .rect(0.44rem);
+    .ab-X;
+    bottom: -0.5rem;
+    animation: close-show 0.5s 1 0.3s both;
+    @keyframes close-show {
+      0% {
+        transform: rotate(0) scale(0);
+      }
+      100% {
+        transform: rotate(1turn) scale(1);
+      }
+    }
+  }
+}
+
+.gift-list-style() {
+  .gift-item {
+    flex: 0 0 33%;
+    margin-bottom: 0.16rem;
+    .bg-normal('@/assets/bg/reward-frame.png');
+    width: 1.06rem;
+    height: 1.42rem;
+    .flex-column;
+    .gift-frame {
+      .rect(0.59rem);
+      .flex-center;
+      margin-top: 0.23rem;
+      > img {
+        .rect(0.59rem);
+        object-fit: contain;
+      }
+    }
+    .name {
+      margin-top: 0.07rem;
+      .flex-center;
+      flex-wrap: wrap;
+      width: 0.71rem;
+      height: 0.2rem;
+      position: relative;
+      font-size: 0.07rem;
+      font-family: Source Han Serif CN;
+      font-weight: 400;
+      font-style: italic;
+      color: #ffffff;
+    }
+    .price {
+      font-size: 0.09rem;
+      font-family: Source Han Serif CN;
+      font-weight: 800;
+      font-style: italic;
+      color: #ffffff;
+      font-style: italic;
+    }
+  }
+}
+
+.btn-style() {
+  width: 1.32rem;
+  height: 0.54rem;
+  .bg-normal('@/assets/btn/blank-btn.png');
+  .flex-center;
+  > p {
+    margin-top: 0.08rem;
+    margin-right: 0.05rem;
+    font-size: 0.14rem;
+    font-family: Source Han Serif CN;
+    font-weight: 600;
+    font-style: italic;
+    color: #b53b0a;
+    .word-stroke(#FFFFFF);
+  }
+}
+
+.handbook-decor() {
+  .decor(@url, @bright) {
+    &::before {
+      .ab-X;
+      top: 0.55rem;
+      width: 0.96rem;
+      height: 0.26rem;
+      content: '';
+      .bg-normal(@url);
+    }
+    .map-card {
+      filter: brightness(@bright);
+    }
+  }
+  &.not-get {
+    .decor('@/assets/text/not-get.png', 0.6);
+  }
+  &.not-start {
+    .decor('@/assets/text/not-start.png', 0.4);
+  }
+}
+
+.wave-animate(@type) {
+  @name: ~'wave-@{type}';
+  animation: @name 0.8s steps(1) infinite;
+  @keyframes @name {
+    each(range(17), {
+      @pers: ((@value - 1) / 16 * 100%);
+      @{pers} {
+        background-image:
+          url('@/assets/bg/common-bg-@{type}.png'),
+          url('@/assets/animate/wave/wave@{value}.jpg');
+      }
+    });
+  }
+}
+
+.normal-char-animate() {
+  @keyframes normal-char-show {
+    each(range(40), {
+      @pers: ((@value - 1) / 39 * 100%);
+      @{pers} {
+        background-image: url('@/assets/animate/normal-character/normal-character@{value}.png');
+      }
+    });
+  }
+}

@@ -1,7 +1,7 @@
 import { GetQueryString } from '@/util'
 
 /** 活动名 */
-export const activityName = 'twelve_stars_' + GetQueryString('month')
+export const activityName = 'twelve_stars_' + (GetQueryString('month') || 'Sept')
 
 // 声明 webridge > state > userData接口规范
 export interface UserData {

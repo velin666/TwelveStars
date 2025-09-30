@@ -8,7 +8,7 @@
         @touchstart.passive="touchAction"
      -->
       <div class="avatar-zone">
-        <!-- <div
+        <div
           v-for="item in 4"
           :key="item + 'ring'"
           :class="[`ring ring${item}`, { stop: stopPlay }]"
@@ -20,21 +20,23 @@
         </div>
         <div class="ring ring-shadow">
           <p></p>
-        </div> -->
+        </div>
         <!-- <div class="ring"></div> -->
         <div class="avatar">
           <transition name="avatar-trans">
             <img
               :src="
-                topInfo.firstInfoMap[
-                  MONTH_VALUE[activeIndex + 1]
-                ]?.topUser?.imgUrl.replace(/\?imageView.+/, '') || unknown
+                topInfo.firstInfoMap[MONTH_VALUE[activeIndex + 1]]?.topUser?.imgUrl.replace(
+                  /\?imageView.+/,
+                  '',
+                ) || unknown
               "
               alt=""
               :key="
-                topInfo.firstInfoMap[
-                  MONTH_VALUE[activeIndex + 1]
-                ]?.topUser?.imgUrl.replace(/\?imageView.+/, '')
+                topInfo.firstInfoMap[MONTH_VALUE[activeIndex + 1]]?.topUser?.imgUrl.replace(
+                  /\?imageView.+/,
+                  '',
+                )
               "
             />
           </transition>
@@ -113,8 +115,9 @@
 <script setup lang="ts">
 import type { ActUserInfoDTO } from '@/interface/public'
 import unknown from '@/assets/icon/doubt-ball.png'
-import { MONTH_VALUE } from '@/interface/Home'
+import { MONTH_VALUE } from '@/views/data'
 import { GetQueryString } from '@/util'
+import { topInfoData } from '@/views/mock'
 
 // type
 interface ITopInfo {
@@ -129,36 +132,19 @@ interface ITopInfo {
 
 interface ActTwelveTopInfo {
   /** 榜一 */
-  topUser: ActUserInfoDTO
+  topUser: ActUserInfoDTO | null
   /** 代表礼物的图链 */
   giftImgUrl: string
   /** 0：未开始；1：进行中；2：活动结束 */
   state: number
 }
-
 /**
  * 初始化
  */
-// const { stopPlay } = defineProps<{ stopPlay: boolean }>()
+const { stopPlay } = defineProps<{ stopPlay: boolean }>()
 
-// enum MONTH_ANIMAL {
-//   '子' = 1,
-//   '丑',
-//   '寅',
-//   '卯',
-//   '辰',
-//   '巳',
-//   '午',
-//   '未',
-//   '申',
-//   '酉',
-//   '戌',
-//   '亥',
-// }
-
-const { showToast, request } = useTools()
 /** 点亮下标 */
-const month = GetQueryString('month') as unknown as keyof typeof MONTH_VALUE
+const month = (GetQueryString('month') as unknown as keyof typeof MONTH_VALUE) || 'Sept'
 // const { month } = useRoute().query as { month: keyof typeof MONTH_VALUE }
 const activeIndex = ref((MONTH_VALUE[month] || 1) - 1)
 
@@ -171,16 +157,12 @@ const topInfo = ref<ITopInfo>({
 })
 /** 获取演变信息 */
 const getTopInfo = () => {
-  request<ITopInfo>('/twelveStar/topInfo').then(res => {
-    const { errCode, errMsg, data } = res
-    if (!errCode) {
-      topInfo.value = data
-      // activeIndex.value = Number(data.curDate.split('-')[1]) - 1
-      vector.value = -activeIndex.value * 30
-    } else {
-      showToast(errMsg)
-    }
-  })
+  // 模拟请求
+  setTimeout(() => {
+    topInfo.value = topInfoData
+    // activeIndex.value = Number(data.curDate.split('-')[1]) - 1
+    vector.value = -activeIndex.value * 30
+  }, 50)
 }
 getTopInfo()
 /**
@@ -229,8 +211,7 @@ const touchAction = (e: MouseEvent | TouchEvent) => {
   if (clickAction.value) return
   cancelAnimationFrame(raf.value)
   /** 起始坐标 */
-  const startAxisX =
-    (e as MouseEvent).pageX || (e as TouchEvent).touches[0].pageX
+  const startAxisX = (e as MouseEvent).pageX || (e as TouchEvent).touches[0].pageX
   /** 上个弧度数据 */
   const oldValue = vector.value
   /** 旋转方向 1 正 -1 反 */
@@ -251,11 +232,8 @@ const touchAction = (e: MouseEvent | TouchEvent) => {
       moveTime = new Date().getTime()
       /** 位移间距 */
       speed =
-        (((e as MouseEvent).pageX || (e as TouchEvent).touches?.[0]?.pageX) -
-          lastMoveAxis) /
-        ratio
-      lastMoveAxis =
-        (e as MouseEvent).pageX || (e as TouchEvent).touches?.[0]?.pageX
+        (((e as MouseEvent).pageX || (e as TouchEvent).touches?.[0]?.pageX) - lastMoveAxis) / ratio
+      lastMoveAxis = (e as MouseEvent).pageX || (e as TouchEvent).touches?.[0]?.pageX
       vector.value = (lastMoveAxis - startAxisX) / 1 / ratio + oldValue
     } else {
       moveActive.value = true
@@ -344,7 +322,9 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
 }
 .avatar-trans-enter-active,
 .avatar-trans-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
 }
 
 .avatar-trans-enter-from,
@@ -387,70 +367,73 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
       .flex-center;
       transform: translate3d(-0.3rem, 0, -0.4rem);
       transform-style: preserve-3d;
-      // .ring {
-      //   transform-style: preserve-3d;
-      //   backface-visibility: hidden;
-      //   .ab-center(2);
+      .ring {
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        .ab-center(2);
 
-      //   .rect(1.35rem);
-      //   .bg-normal('@/assets/bg/top-user-ring4.png');
+        .rect(1.35rem);
+        .bg-normal('@/assets/bg/top-user-ring4.png');
 
-      //   &.stop {
-      //     >p {
-      //       animation-play-state: paused;
-      //     }
-      //   }
-      // }
+        &.stop {
+          > p {
+            animation-play-state: paused;
+          }
+        }
+      }
 
-      // @size: 3.3, 3.2, 2.07, 1.78, 3.47;
-      // @x: 3.5, 1.5, 0, 0, 0.7;
-      // @y: -1, 1.2, 0, 0, 0.2;
-      // @z: 0, 0, 0, 0, 0;
-      // @angle: 69, 67, 0, 0, 54;
+      @size: 3.3, 3.2, 2.07, 1.78, 3.47;
+      @x: 3.5, 1.5, 0, 0, 0.7;
+      @y: -1, 1.2, 0, 0, 0.2;
+      @z: 0, 0, 0, 0, 0;
+      @angle: 69, 67, 0, 0, 54;
 
-      // each(@size, {
-      //   .ring@{index} {
-      //     .rect(unit(@value, rem));
-      //     transform: rotate3d(extract(@x, @index),
-      //       extract(@y, @index),
-      //       extract(@z, @index),
-      //       unit(extract(@angle, @index), deg)) if((@index =2), translate3d(.3rem, -.4rem, 0)) if((@index =5), translate3d(0rem, .4rem, -0)) if(not(@index =2) and not(@index =5), translateZ(0));
+      each(@size, {
+        .ring@{index} {
+          .rect(unit(@value, rem));
+          transform: rotate3d(extract(@x, @index),
+            extract(@y, @index),
+            extract(@z, @index),
+            unit(extract(@angle, @index), deg)) if((@index =2), translate3d(.3rem, -.4rem, 0)) if((@index =5), translate3d(0rem, .4rem, -0)) if(not(@index =2) and not(@index =5), translateZ(0));
 
-      //     > p {
-      //       .rect(unit(@value, rem));
-      //       .bg-normal('@/assets/bg/top-user-ring@{index}.png');
-      //       animation: if(not (@index =4) and not(@index =5), ring-rotate 8s linear infinite if(@index =5, reverse), none);
+          > p {
+            .rect(unit(@value, rem));
+            .bg-normal('@/assets/bg/top-user-ring@{index}.png');
+            animation: if(not (@index =4) and not(@index =5), ring-rotate 8s linear infinite if(@index =5, reverse), none);
 
-      //       @keyframes ring-rotate {
-      //         100% {
-      //           transform: rotate(1turn);
-      //         }
-      //       }
-      //     }
-      //   }
-      // });
+            @keyframes ring-rotate {
+              100% {
+                transform: rotate(1turn);
+              }
+            }
+          }
+        }
+      });
 
-      // .ring-shadow {
-      //   backface-visibility: hidden;
-      //   .rect(unit(extract(@size, 5), rem));
-      //   transform: rotate3d(extract(@x, 5),
-      //       extract(@y, 5),
-      //       extract(@z, 5),
-      //       unit(extract(@angle, 5), deg)) translate3d(0rem, 0.4rem, 0);
+      .ring-shadow {
+        backface-visibility: hidden;
+        .rect(unit(extract(@size, 5), rem));
+        transform: rotate3d(
+            extract(@x, 5),
+            extract(@y, 5),
+            extract(@z, 5),
+            unit(extract(@angle, 5), deg)
+          )
+          translate3d(0rem, 0.4rem, 0);
 
-      //   >p {
-      //     .rect(unit(extract(@size, 5), rem));
-      //     .bg-normal('@/assets/bg/top-user-ring-shadow.png');
-      //   }
-      // }
+        > p {
+          .rect(unit(extract(@size, 5), rem));
+          .bg-normal('@/assets/bg/top-user-ring-shadow.png');
+        }
+      }
 
-      // &::before {
-      //   backface-visibility: hidden;
-      //   content: '';
-      //   .ab-center(2);
-      //   .rect(2rem);
-      //   transform-style: preserve-3d;
-      // }
+      &::before {
+        backface-visibility: hidden;
+        content: '';
+        .ab-center(2);
+        .rect(2rem);
+        transform-style: preserve-3d;
+      }
 
       &::after {
         backface-visibility: hidden;

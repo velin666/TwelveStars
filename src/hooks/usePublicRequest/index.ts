@@ -54,12 +54,14 @@ export const usePublicRequest = () => {
   })
   /** 用户信息 */
   const initUserInfo = () => ({
-    uid: 0,
-    nickname: '',
-    imgUrl: '',
-    sex: 0,
+    uid: 16935575,
+    nickname: '带头骨头肉荷包蛋',
+    imgUrl:
+      'https://image.tidutec.com/2019/08/28/162004500/50807677-user.png?imageView/3/w/100/h/100',
     state: 0,
-    beanAmount: 0,
+    sex: 2,
+    birthday: null,
+    beanAmount: 99148925,
   })
 
   /**
@@ -74,7 +76,29 @@ export const usePublicRequest = () => {
       dateInfos: [],
       state: 0,
     },
-    resBaseGift: [],
+    resBaseGift: [
+      {
+        vgId: 1,
+        vgName: '幸运草',
+        vgImg: 'https://image.tidutec.com/vgift/new_xyc.png',
+        price: 5,
+        num: 0,
+      },
+      {
+        vgId: 2564,
+        vgName: '桃花仙',
+        vgImg: 'https://image.tidutec.com/cms/b6f77a94c9e7fec0/taohuaxian.png',
+        price: 500,
+        num: 0,
+      },
+      {
+        vgId: 2689,
+        vgName: '时光穿梭',
+        vgImg: 'https://image.tidutec.com/cms/b6f77a94c9e7fec0/shiguangchuansuo.png',
+        price: 1000,
+        num: 0,
+      },
+    ],
     resFindRoom: initRoomInfo(),
     resFindUser: initUserInfo(),
     resFriends: [],

@@ -42,8 +42,7 @@ export function resizeRem(): void {
  * @param {number} val 输入数字
  * @return {*}
  */
-export const tenDigit = (val: number): string | number =>
-  val < 10 ? '0' + val : val + ''
+export const tenDigit = (val: number): string | number => (val < 10 ? '0' + val : val + '')
 
 /**
  * @description: 处理数值展示
@@ -63,9 +62,7 @@ export function omitValue(val = '', len = 8): string {
 }
 // 获取SessionId
 export const getSessionId = (): string | null =>
-  import.meta.env.DEV
-    ? GetQueryString('devToken') || DEFAULT_SESSIONID
-    : getCookie('sessionActId')
+  import.meta.env.DEV ? GetQueryString('devToken') || DEFAULT_SESSIONID : getCookie('sessionActId')
 /**
  * @description: 大于一万加单位
  * @param {number} num
@@ -102,10 +99,7 @@ export function getUid(): string {
 */
 export function GetQueryString(str: string): string {
   const href = String(window.document.location.href)
-  const rs: RegExpExecArray | null = new RegExp(
-    '([?&])(' + str + ')=([^&]*)(&|$)',
-    'gi'
-  ).exec(href)
+  const rs: RegExpExecArray | null = new RegExp('([?&])(' + str + ')=([^&]*)(&|$)', 'gi').exec(href)
   if (rs) {
     return decodeURI(rs[3]).split('#/')[0]
   } else {
@@ -146,9 +140,20 @@ export class AppLoading {
  * @param {string} url 图片地址
  * @return {*}
  */
-export const getImageFile = (url: string) =>
-  new URL(`../assets/${url}`, import.meta.url).href
 
+export function getImageFile(path: string) {
+  const pathArr = path.split('/')
+  switch (pathArr.length) {
+    case 1:
+      return new URL(`/src/assets/${path}`, import.meta.url).href
+    case 2:
+      return new URL(`/src/assets/${pathArr[0]}/${pathArr[1]}`, import.meta.url).href
+    case 3:
+      return new URL(`/src/assets/${pathArr[0]}/${pathArr[1]}/${pathArr[2]}`, import.meta.url).href
+    default:
+      throw new Error('Invalid path')
+  }
+}
 /**
  * @desc 三阶贝塞尔
  * @param {number} t 当前百分比
@@ -162,7 +167,7 @@ export function threeBezier(
   p1: [number, number],
   cp1: [number, number],
   cp2: [number, number],
-  p2: [number, number]
+  p2: [number, number],
 ) {
   const [x1, y1] = p1
   const [x2, y2] = p2
@@ -215,5 +220,4 @@ export const calculateAge = (birthDateString: string) => {
 }
 
 // 唯一id生成
-export const createUniqId = (): string =>
-  (Math.random() + new Date().getTime()).toString(32)
+export const createUniqId = (): string => (Math.random() + new Date().getTime()).toString(32)

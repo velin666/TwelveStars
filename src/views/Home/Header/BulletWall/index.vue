@@ -11,7 +11,7 @@
       @animationend="bulletInfo.splice(index, 1)"
       :style="{ top: item.position + 'rem' }"
     >
-      <div class="bullet-avatar" @click.stop="toClientRoom(item.roomId)">
+      <div class="bullet-avatar">
         <img :src="item.roomImg" alt="" />
       </div>
       <p class="bullet-text">{{ item.barrage }}</p>
@@ -22,6 +22,7 @@
 <!-- 弹幕墙 -->
 <script setup lang="ts">
 import { useBullet, type IBulletItem } from '@/stores/bullet'
+import { bulletItemData } from '@/views/mock'
 
 // type
 interface IBulletInfo extends IBulletItem {
@@ -34,8 +35,6 @@ interface IBulletInfo extends IBulletItem {
  * 初始化
  */
 const { stopPlay } = defineProps<{ stopPlay: boolean }>()
-const { showToast, request } = useTools()
-const { toClientRoom } = useWebridge()
 const { setBullet, selfBulletItem } = toRefs(useBullet())
 
 /**  */
@@ -51,16 +50,12 @@ const stopId = ref('')
 const bulletTimer = ref(0)
 /** 获取演变信息 */
 const getBulletInfo = () => {
-  request<IBulletItem[]>('/twelveStar/barrageList').then(res => {
-    const { errCode, errMsg, data } = res
-    if (!errCode) {
-      bulletItem.value = data
-      bulletIndex.value = 0
-      bulletCycle()
-    } else {
-      showToast(errMsg)
-    }
-  })
+  // 模拟请求
+  setTimeout(() => {
+    bulletItem.value = bulletItemData
+    bulletIndex.value = 0
+    bulletCycle()
+  }, 50)
 }
 getBulletInfo()
 /**
@@ -106,32 +101,45 @@ const bulletOption = (id?: string): void => {
 
 watch(
   () => selfBulletItem.value,
-  val => {
+  (val) => {
     if (val.roomId) {
       bulletItem.value.splice(bulletIndex.value, 0, {
         ...val,
       })
       setBullet.value({ ...val, roomId: 0 })
     }
-  }
+  },
 )
 
 watch(
   () => stopPlay,
-  val => {
+  (val) => {
     if (val) {
       clearTimeout(stopTimer.value)
       clearTimeout(bulletTimer.value)
     } else {
       bulletCycle()
     }
-  }
+  },
 )
 
 onBeforeUnmount(() => {
   clearTimeout(stopTimer.value)
   clearTimeout(bulletTimer.value)
 })
+/**
+ * @description: 移动端熄屏动作处理
+ */
+const checkViChange = (): void => {
+  if (!document.hidden) {
+    getBulletInfo()
+  } else {
+    clearTimeout(stopTimer.value)
+    clearTimeout(bulletTimer.value)
+  }
+}
+// 适用于安卓切换后台和息屏， 适用于苹果切换后台
+document.addEventListener('visibilitychange', checkViChange)
 </script>
 
 <style scoped lang="less">
@@ -175,11 +183,7 @@ onBeforeUnmount(() => {
       border: solid #fff0d4;
       border-width: 0.01rem 0;
       .ab2-center;
-      mask-image: linear-gradient(
-        90deg,
-        rgb(255, 255, 255) 35% 65%,
-        rgba(0, 0, 0, 0) 100%
-      );
+      mask-image: linear-gradient(90deg, rgb(255, 255, 255) 35% 65%, rgba(0, 0, 0, 0) 100%);
       mask-size: 100%;
     }
     .bullet-avatar {

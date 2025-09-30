@@ -1,7 +1,7 @@
 <template>
   <div class="Home">
     <!-- 头部展示 -->
-    <!-- <Header /> -->
+    <Header />
     <div class="tab-zone">
       <div
         class="tab-item"
@@ -19,18 +19,17 @@
     </div>
     <!-- 主信息展示 -->
     <div class="data-zone">
-      <!-- <transition :name="tabData.tabAnimate">
+      <transition :name="tabData.tabAnimate">
         <component :is="comp[tabData.tabIndex]" />
-      </transition> -->
+      </transition>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import Header from './Header/index.vue'
+import Header from './Header/index.vue'
 //
 import { baseKey } from '../data'
-
 /**
  * tab相关
  */
@@ -124,12 +123,12 @@ const tabSwitch = (info: (typeof tabInfo)['value'][number]): void => {
  * 主信息区
  */
 /** 切换组件 */
-// const comp = [
-//   defineAsyncComponent(() => import('./Transfer/index.vue')),
-//   defineAsyncComponent(() => import('./Rank/index.vue')),
-//   defineAsyncComponent(() => import('./Rank/index.vue')),
-//   defineAsyncComponent(() => import('./HandBook/index.vue')),
-// ]
+const comp = [
+  defineAsyncComponent(() => import('./Transfer/index.vue')),
+  defineAsyncComponent(() => import('./Rank/index.vue')),
+  defineAsyncComponent(() => import('./Rank/index.vue')),
+  defineAsyncComponent(() => import('./HandBook/index.vue')),
+]
 
 const { resBaseGift } = usePublicRequest()
 // getBaseGift()
