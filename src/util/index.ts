@@ -140,20 +140,9 @@ export class AppLoading {
  * @param {string} url 图片地址
  * @return {*}
  */
+export const getImageFile = (path: string) =>
+  new URL(location.origin + `/src/assets/${path}`, import.meta.url).href
 
-export function getImageFile(path: string) {
-  const pathArr = path.split('/')
-  switch (pathArr.length) {
-    case 1:
-      return new URL(`/src/assets/${path}`, import.meta.url).href
-    case 2:
-      return new URL(`/src/assets/${pathArr[0]}/${pathArr[1]}`, import.meta.url).href
-    case 3:
-      return new URL(`/src/assets/${pathArr[0]}/${pathArr[1]}/${pathArr[2]}`, import.meta.url).href
-    default:
-      throw new Error('Invalid path')
-  }
-}
 /**
  * @desc 三阶贝塞尔
  * @param {number} t 当前百分比

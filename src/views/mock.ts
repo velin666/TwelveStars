@@ -880,7 +880,7 @@ export const taskInfoData = [
     totalStep: 1,
     finishStep: 0,
     rateValue: 100,
-    valueCnt: 0,
+    valueCnt: 50,
   },
   {
     taskId: 3,
@@ -888,7 +888,7 @@ export const taskInfoData = [
     totalStep: -1,
     finishStep: 0,
     rateValue: 1000,
-    valueCnt: 0,
+    valueCnt: 300,
   },
   {
     taskId: 4,
@@ -902,9 +902,9 @@ export const taskInfoData = [
     taskId: 5,
     taskName: '每日送出或收到水晶宝盒50个',
     totalStep: 10,
-    finishStep: 0,
+    finishStep: 10,
     rateValue: 50,
-    valueCnt: 0,
+    valueCnt: 50,
   },
   {
     taskId: 6,
@@ -1056,6 +1056,22 @@ export const roomRank = {
       imgUrl:
         'https://image.tidutec.com/2023/05/25/165552159_94573255-user.jpg?imageView/3/w/100/h/100',
       rank: 2,
+    },
+    {
+      score: 6000,
+      dataId: 10000001,
+      name: '沸羊羊快乐起来1',
+      imgUrl:
+        'https://image.tidutec.com/2023/05/25/165552159_94573255-user.jpg?imageView/3/w/100/h/100',
+      rank: 3,
+    },
+    {
+      score: 6000,
+      dataId: 10000001,
+      name: '沸羊羊快乐起来2',
+      imgUrl:
+        'https://image.tidutec.com/2023/05/25/165552159_94573255-user.jpg?imageView/3/w/100/h/100',
+      rank: 4,
     },
   ],
   pageNum: 1,

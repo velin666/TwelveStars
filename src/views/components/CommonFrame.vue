@@ -21,22 +21,23 @@ const { title } = defineProps<{
 <style scoped lang="less">
 .CommonFrame {
   position: relative;
-  &::before {
-    content: '';
-    .bg-normal('@/assets/bg/common-bg-upper.png');
-    width: 3.62rem;
-    height: 0.59rem;
-    .ab-X(5);
-    top: -0.09rem;
-  }
-  &::after {
-    content: '';
-    width: 3.62rem;
-    height: 0.25rem;
-    .bg-normal('@/assets/bg/common-bg-under.png');
-    .ab-X(5);
-    bottom: -0.07rem;
-  }
+  // &::before {
+  //   content: '';
+  //   .bg-normal('@/assets/bg/common-bg-upper.png');
+  //   width: 3.75rem;
+  //   height: 2.36rem;
+  //   .ab-X(2);
+  //   top: -0.09rem;
+  // }
+  // &::after {
+  //   content: '';
+  //   width: 3.75rem;
+  //   height: 2.65rem;
+  //   .bg-normal('@/assets/bg/common-bg-under.png');
+  //   .ab-X(5);
+  //   bottom: -0.07rem;
+  // }
+  .tri-bg(3.75, 2.36, 2.65);
   .decor {
     position: absolute;
     z-index: 6;
@@ -63,8 +64,9 @@ const { title } = defineProps<{
     }
   }
   .title {
-    height: 0.55rem;
+    height: 0.56rem;
     .ab-X(10);
+    transform: translateX(0.1rem);
     top: -0.05rem;
   }
   .sec-frame {
@@ -72,24 +74,24 @@ const { title } = defineProps<{
     position: relative;
     z-index: 3;
     padding-top: 0.36rem;
-    width: 3.62rem;
-    min-height: 1.36rem;
-    background-image: url('@/assets/bg/common-bg.png'), url('@/assets/bg/star-bg.png');
-    background-size:
-      100% 100%,
-      3.56rem 2.76rem;
-    background-repeat: no-repeat, repeat-y;
-    background-position: center;
-    background-blend-mode: screen;
-    box-sizing: border-box;
+    // width: 3.75rem;
+    // min-height: 1.36rem;
+    // background-image: url('@/assets/bg/common-bg.png'), url('@/assets/bg/star-bg.png');
+    // background-size:
+    //   100% 100%,
+    //   3.56rem 2.76rem;
+    // background-repeat: no-repeat, repeat-y;
+    // background-position: center;
+    // background-blend-mode: screen;
+    // box-sizing: border-box;
     // mask-image: url('@/assets/bg/bg-mask.png'), linear-gradient(0, #fff 0% 100%);
-    mask-image: url('@/assets/bg/bg-mask.png'), url('@/assets/bg/common-bg.png');
-    mask-size:
-      3.62rem 0.32rem,
-      100% 100%;
-    mask-position: center top;
-    mask-repeat: no-repeat;
-    mask-composite: exclude;
+    // mask-image: url('@/assets/bg/bg-mask.png'), url('@/assets/bg/common-bg.png');
+    // mask-size:
+    //   3.62rem 0.32rem,
+    //   100% 100%;
+    // mask-position: center top;
+    // mask-repeat: no-repeat;
+    // mask-composite: exclude;
   }
   &.dash {
     .sec-frame {

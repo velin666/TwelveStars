@@ -1,20 +1,18 @@
 <template>
-  <CommonFrame class="Lottery dash" :class="'level' + (advancedLottery + 1)">
-    <template #upper>
-      <div class="upper-zone">
-        <div class="level-down-btn btn" @click="levelChange(0)"></div>
-        <div class="guild left-dir">
+  <div class="Lottery dash" :class="'level' + (advancedLottery + 1)">
+    <div class="upper-zone">
+      <div class="level-down-btn btn" @click="levelChange(0)"></div>
+      <div class="guild left-dir">
+        <p v-for="item in 8" :key="'arr' + item"></p>
+      </div>
+      <img src="@/assets/other/turn-round.png" alt="" class="turn-round" />
+      <template v-if="selfInfo.enableAdvanceDraw">
+        <div class="guild right-dir">
           <p v-for="item in 8" :key="'arr' + item"></p>
         </div>
-        <img src="@/assets/other/turn-round.png" alt="" class="turn-round" />
-        <template v-if="selfInfo.enableAdvanceDraw">
-          <div class="guild right-dir">
-            <p v-for="item in 8" :key="'arr' + item"></p>
-          </div>
-          <div class="level-up-btn btn" @click="levelChange(1)"></div>
-        </template>
-      </div>
-    </template>
+        <div class="level-up-btn btn" @click="levelChange(1)"></div>
+      </template>
+    </div>
     <div
       class="main-lottery"
       :class="[{ 'change-set': advancedLottery !== ballIndex }, 'lag-level' + (ballIndex + 1)]"
@@ -78,7 +76,7 @@
         </div>
         <div class="infos">
           <img src="@/assets/btn/record-btn.png" alt="" class="btn" @click="openRecordDialog" />
-          <p class="small-tips">*本月活动结束将会重置~</p>
+          <!-- <p class="small-tips">*本月活动结束将会重置~</p> -->
         </div>
       </div>
     </div>
@@ -87,10 +85,8 @@
     <Model v-model="dialog.rewardDialog">
       <div class="reward-dialog">
         <img src="@/assets/text/reward-title.png" alt="" class="title" />
-        <div class="base-tips">
-          恭喜获得以下奖励<img src="@/assets/icon/white-star.png" alt="" />
-        </div>
-        <div class="gift-list">
+        <div class="base-tips">恭喜获得以下奖励</div>
+        <!-- <div class="gift-list">
           <div class="gift-item" v-for="(val, index) in dialog.rewardInfo" :key="index + 'gift'">
             <div class="gift-frame">
               <img :src="val.rewardImg" alt="" />
@@ -98,7 +94,8 @@
             <p class="name">{{ val.rewardName }}*{{ val.multipleCount + val.unit }}</p>
             <p class="price">x{{ val.count || 1 }}</p>
           </div>
-        </div>
+        </div> -->
+        <img src="@/assets/other/show-reward-frame.png" alt="" class="gift-frame" />
         <img
           src="@/assets/icon/close-icon.png"
           alt=""
@@ -152,11 +149,10 @@
         />
       </div>
     </Model>
-  </CommonFrame>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CommonFrame from '@/views/components/CommonFrame.vue'
 import type { ActivityCommonReward } from '@/interface/public'
 import { selfInfoData, starEvolutionRecord } from '@/views/mock'
 import { dialogRewardInfo } from '@/stores/dialog'
@@ -507,12 +503,45 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="less">
+// 横向序列帧雪碧图动画
+// 使用说明：
+//  - @url: 横向拼接的雪碧图路径（40帧）
+//  - @frames: 帧数（默认40）
+//  - @duration: 动画时长（默认1s）
+.sprite-animate(@url, @frames: 40, @duration: 2s) {
+  background-image: url(@url);
+  background-repeat: no-repeat;
+  // 横向 @frames 张拼接，宽度按帧数等比放大
+  background-size: (@frames * 100%) 100%;
+  background-position: 0 0;
+  animation: sprite-run-40 @duration steps((@frames - 1)) infinite;
+}
+
+@keyframes sprite-run-40 {
+  100% {
+    background-position: 100% 0;
+  }
+}
+
 .Lottery {
-  margin-top: 0.9rem;
+  margin-top: 0.25rem;
+  width: 3.75rem;
+  height: 5.52rem;
+  position: relative;
+  box-sizing: border-box;
+  padding-top: 0.2rem;
+  &::before {
+    content: '';
+    .bg-normal('@/assets/bg/lottery-frame.png');
+    width: 3.75rem;
+    height: 5.52rem;
+    .ab-center(3);
+    pointer-events: none;
+  }
   .upper-zone {
     .ab-X;
     width: 3.62rem;
-    top: -0.7rem;
+    top: -0.6rem;
     .flex-center;
     &::before {
       content: '';
@@ -649,25 +678,31 @@ onBeforeUnmount(() => {
   }
   .main-lottery {
     .flex-column;
-    width: 3.62rem;
+    padding-top: 0.2rem;
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+    width: 3.75rem;
     height: 100%;
     background-blend-mode: screen;
     background-size:
-      3.62rem 4.47rem,
+      3.75rem 4.36rem,
       3.2rem 1.2rem;
     background-position:
       center 0.1rem,
       center 2.6rem;
     background-repeat: no-repeat;
-
-    mask-image: url('@/assets/bg/dash-mask.png');
-    mask-size: 3.62rem 100%;
-    mask-repeat: no-repeat;
-    mask-position: center;
+    > div {
+      pointer-events: auto;
+    }
+    // mask-image: url('@/assets/bg/dash-mask.png');
+    // mask-size: 3.62rem 100%;
+    // mask-repeat: no-repeat;
+    // mask-position: center;
 
     .ball-zone {
       padding-top: 0.6rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       position: relative;
       z-index: 2;
       perspective-origin: center;
@@ -709,7 +744,7 @@ onBeforeUnmount(() => {
           }
         }
         .tab-block {
-          .bg-normal('@/assets/bg/bubble-purple-bg.png');
+          // .sprite-animate('@/assets/animate/bubble-purple-animate.png');
           transform: translate3d(0, 0, 0);
           transform-style: preserve-3d;
           width: 1.96rem;
@@ -773,18 +808,14 @@ onBeforeUnmount(() => {
         .ab-center;
         // perspective: 2rem;
         backface-visibility: hidden;
-        .rect(0.3rem);
+        .rect(0.4rem);
         .flex-center;
         transform-style: preserve-3d;
         &::before {
           content: '';
-          position: absolute;
-          z-index: 1;
-          .bg-normal('@/assets/bg/bubble-purple-bg.png');
-          width: 0.61rem;
-          height: 0.6rem;
-          left: -0.1rem;
-          top: -0.08rem;
+          .ab-center;
+          .sprite-animate('@/assets/animate/bubble-purple-animate.png');
+          .rect(0.4rem);
         }
         &.active {
           animation: brightness 1s 1;
@@ -814,7 +845,7 @@ onBeforeUnmount(() => {
         }
         > img {
           filter: drop-shadow(0 0 0.02rem rgb(95, 44, 9));
-          .rect(0.27rem);
+          .rect(0.2rem);
           object-fit: contain;
           position: relative;
           z-index: 2;
@@ -866,7 +897,7 @@ onBeforeUnmount(() => {
     }
     .btn-zone {
       .ab-X;
-      bottom: 0.87rem;
+      bottom: 1.5rem;
       .flex-center;
       .btn-wrapper {
         width: 1.1rem;
@@ -894,20 +925,19 @@ onBeforeUnmount(() => {
       }
     }
     .my-info {
-      width: 3.56rem;
-      height: 1.5rem;
+      width: 3.75rem;
+      height: 1.48rem;
       .bg-normal('@/assets/bg/transform-bg.png');
       .flex-center;
-      padding-top: 0.6rem;
       box-sizing: border-box;
       .avatar {
-        margin-left: 0.25rem;
-        .round(0.56rem);
+        margin-left: 0.5rem;
+        .round(0.5rem);
         border: 0.01rem solid #ffffff;
       }
       > div {
         .small-tips {
-          margin-top: 0.06rem;
+          margin-top: 0.02rem;
           font-size: 0.09rem;
           font-family: Source Han Serif CN;
           font-weight: 200;
@@ -920,7 +950,6 @@ onBeforeUnmount(() => {
         text-align: left;
         margin-left: 0.06rem;
         .count {
-          margin: 0.04rem 0;
           font-size: 0.1rem;
           font-family: Source Han Serif CN;
           font-weight: 400;
@@ -934,7 +963,7 @@ onBeforeUnmount(() => {
       }
       .infos {
         .flex-column;
-        margin-right: 0.2rem;
+        margin-right: 0.4rem;
         .btn {
           width: 0.8rem;
           height: 0.26rem;
@@ -957,9 +986,9 @@ onBeforeUnmount(() => {
         url('@/assets/bg/common-bg-advance.png'), url('@/assets/animate/wave/wave1.jpg');
       .ball-zone {
         .navgation-ball {
-          background: linear-gradient(0deg, #e58a1f, #edd14f, #fbf7d0);
+          // background: linear-gradient(0deg, #e58a1f, #edd14f, #fbf7d0);
           .tab-block {
-            background-image: url('@/assets/bg/bubble-gold-bg.png');
+            // .sprite-animate('@/assets/animate/bubble-gold-animate.png');
             &::before {
               content: '';
               width: 1.96rem;
@@ -970,7 +999,9 @@ onBeforeUnmount(() => {
             .wave-zone {
               .wave-wrapper {
                 .w-wave {
-                  background: rgba(92, 64, 227, 0.8);
+                  // background: rgba(92, 64, 227, 0.8);
+                  background: linear-gradient(180deg, #e58a1f 30%, #edd14f, #fbf7d0);
+                  opacity: 0.8;
                 }
               }
             }
@@ -978,7 +1009,7 @@ onBeforeUnmount(() => {
         }
         .ball {
           &::before {
-            background-image: url('@/assets/bg/bubble-gold-bg.png');
+            .sprite-animate('@/assets/animate/bubble-gold-animate.png');
           }
         }
       }
@@ -1069,48 +1100,29 @@ onBeforeUnmount(() => {
 }
 
 .reward-dialog {
-  .common-dialog;
+  // .common-dialog;
+  .flex-column;
+  width: 3.75rem;
+  height: 5.35rem;
+  .bg-normal('@/assets/bg/reward-dialog-bg.png');
+  position: relative;
   .title {
-    width: 1.41rem;
-    height: 0.49rem;
-    margin-top: 0.35rem;
+    width: 3.75rem;
+    height: 1.54rem;
+    .ab-X;
+    top: -0.3rem;
   }
   .base-tips {
-    margin-top: 0.56rem;
-    .decor {
-      content: '';
-      .ab-X;
-      .linear-bg(#EBD8FF);
-      width: fit-content;
-      .flex-center;
-      width: 2.7rem;
-      height: 0.01rem;
-    }
-    &::before {
-      .decor;
-      top: 0;
-    }
-    &::after {
-      .decor;
-      bottom: 0;
-    }
+    margin-top: 1.3rem;
     .flex-center;
-    width: 2.7rem;
-    height: 0.17rem;
-    .linear-bg(#5821d0, 20% 80%);
-    font-size: 0.09rem;
+    width: 2.17rem;
+    height: 0.22rem;
+    .linear-bg(#FFFEAA, 20% 80%);
     font-family: Source Han Serif CN;
-    font-weight: 300;
-    color: #ffffff;
+    font-weight: 400;
+    font-size: 0.1rem;
+    color: #973f30;
     position: relative;
-    > img {
-      position: absolute;
-      z-index: 1;
-      width: 0.12rem;
-      height: 0.17rem;
-      top: 0.02rem;
-      right: 0.5rem;
-    }
   }
   .gift-list {
     margin: 0.15rem 0 1rem;
@@ -1121,6 +1133,25 @@ onBeforeUnmount(() => {
     .flex-center;
     .gift-list-style;
     flex-wrap: wrap;
+  }
+  .gift-frame {
+    margin-top: 0.15rem;
+    width: 1.29rem;
+    height: 2.02rem;
+  }
+  .close-icon {
+    .rect(0.44rem);
+    .ab-X;
+    bottom: -0.5rem;
+    animation: close-show 0.5s 1 0.3s both;
+    @keyframes close-show {
+      0% {
+        transform: rotate(0) scale(0);
+      }
+      100% {
+        transform: rotate(1turn) scale(1);
+      }
+    }
   }
 }
 

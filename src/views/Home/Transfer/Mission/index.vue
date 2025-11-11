@@ -104,7 +104,7 @@ const signInTask = () =>
 
 <style scoped lang="less">
 .Mission {
-  margin-top: 0.45rem;
+  margin-top: 0.15rem;
   position: relative;
 
   .title {
@@ -113,15 +113,14 @@ const signInTask = () =>
   }
 
   .task-list {
-    margin: 0.15rem 0 0.25rem;
+    margin: 0.45rem 0 0.65rem;
 
     .task-item {
-      width: 3.19rem;
-      height: 0.69rem;
+      width: 3.13rem;
+      height: 0.72rem;
       .bg-normal('@/assets/bg/mission-bg.png');
       .flex-center;
       box-sizing: border-box;
-      padding-bottom: 0.12rem;
 
       .base-info {
         flex-grow: 1;

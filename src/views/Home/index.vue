@@ -148,12 +148,22 @@ provide(baseKey, {
   min-height: 100vh;
   margin-bottom: 0.4rem;
   .bg-normal('@/assets/bg/dashboard.png');
+  &::before {
+    .ab-X;
+    top: 5.3rem;
+    content: '';
+    width: 3.75rem;
+    height: 2.61rem;
+    .bg-normal('@/assets/bg/tab-bg.png');
+    transform: scale(-1, 0.9);
+  }
   .tab-zone {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.3rem;
     transform-style: preserve-3d;
     width: 3.75rem;
     position: relative;
-    height: 1rem;
+    z-index: 2;
+    height: 1.2rem;
     perspective: 2rem;
     pointer-events: none;
     .tab-item {
@@ -161,35 +171,27 @@ provide(baseKey, {
       position: absolute;
       left: 0;
       bottom: 0;
-      z-index: 1;
-      width: 1rem;
-      height: 0.76rem;
+      z-index: 2;
       .flex-center;
       transition: transform 0.5s;
 
       .ball {
-        width: 0.88rem;
-        height: 0.74rem;
+        width: 1.09rem;
+        height: 0.99rem;
         .flex-center;
         transition:
           transform 0.5s,
           filter 0.5s;
         pointer-events: none;
-        transform: scale(1.2);
+        transform: scale(0.8);
         filter: brightness(0.6);
         &.active {
-          transform: scale(1.5);
+          transform: scale(1.2);
           filter: brightness(1);
         }
         > p {
           pointer-events: auto;
           .rect(0.5rem);
-        }
-      }
-      &.number2 {
-        .ball {
-          width: 1rem;
-          height: 0.76rem;
         }
       }
       each(range(4), {

@@ -42,49 +42,10 @@
           </transition>
         </div>
       </div>
-      <!-- <div
-        class="ball"
-        :class="[
-          {
-            active: !moveActive && !clickAction && activeIndex === idx,
-          },
-          'ball-num' + (idx + 1)
-        ]"
-        v-for="(item, idx) in position"
-        :key="idx"
-        :style="{ transform: item }" @click.stop="clickBallAction(idx)"
-      >
-        <div class="ball-wrapper">
-          <p>{{ MONTH_ANIMAL[idx + 1] }}</p>
-          <p></p>
-        </div>
-      </div> -->
     </div>
     <div class="pointer-icon">
       <img src="@/assets/icon/pointer-icon.png" alt="" />
     </div>
-    <!-- <div class="pointer-diamond">
-      <div class="diamond-upper diamond-wrapper">
-        <div
-          class="diamond-item"
-          v-for="item in 4"
-          :key="item + 'dia'"
-          :style="{
-            background: `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
-          }"
-        ></div>
-      </div>
-      <div class="diamond-under diamond-wrapper">
-        <div
-          class="diamond-item"
-          v-for="item in 4"
-          :key="item + 'dia'"
-          :style="{
-            background: `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
-          }"
-        ></div>
-      </div>
-    </div> -->
     <div
       class="touch-zone"
       @mousedown.prevent="touchAction"
@@ -142,11 +103,17 @@ interface ActTwelveTopInfo {
  * 初始化
  */
 const { stopPlay } = defineProps<{ stopPlay: boolean }>()
+const emit = defineEmits<{
+  updateIndex: [value: number]
+}>()
 
 /** 点亮下标 */
 const month = (GetQueryString('month') as unknown as keyof typeof MONTH_VALUE) || 'Sept'
 // const { month } = useRoute().query as { month: keyof typeof MONTH_VALUE }
 const activeIndex = ref((MONTH_VALUE[month] || 1) - 1)
+watch(activeIndex, (val) => emit('updateIndex', val), {
+  immediate: true,
+})
 
 /**
  * 演变信息
@@ -181,22 +148,6 @@ const ratio = document.body.clientWidth / 375
 /** 触屏交互判定延时 */
 const lagTimeout = ref(0)
 
-/** 位移计算 */
-// const position = computed(() =>
-//   Array(12)
-//     .fill('')
-//     .map(
-//       (_, i) =>
-//         `translate3d(${Math.sin((Math.PI / 6) * (12 - i) + (vector.value * Math.PI) / 180) * 1.4
-//         }rem, ${Math.cos(
-//           (Math.PI / 6) * (12 - i) + (vector.value * Math.PI) / 180 - Math.PI / 16
-//         ) * .9
-//         }rem, ${Math.cos(
-//           (Math.PI / 6) * (12 - i) + (vector.value * Math.PI) / 180 + Math.PI / 8
-//         ) * 1.4
-//         }rem)`
-//     )
-// )
 /** 当前命中下标 */
 const currentPosition = () => {
   activeIndex.value =
@@ -206,6 +157,7 @@ const currentPosition = () => {
         : 12 - (Math.abs(Math.floor((vector.value % 360) / 30)) || 12))) %
     12
 }
+
 /** 交互操作 */
 const touchAction = (e: MouseEvent | TouchEvent) => {
   if (clickAction.value) return
@@ -273,45 +225,6 @@ const touchAction = (e: MouseEvent | TouchEvent) => {
     }
   }
 }
-/** 点击球体操作 */
-// const clickBallAction = (idx: number) => {
-//   if (clickAction.value || activeIndex.value === idx) return
-//   clickAction.value = true
-//   cancelAnimationFrame(raf.value)
-//   let step = 0
-//   if (
-//     Math.abs(activeIndex.value - idx) <=
-//     Math.min(
-//       Math.abs(activeIndex.value - idx - 12),
-//       Math.abs(activeIndex.value - idx + 12)
-//     )
-//   ) {
-//     step = idx - activeIndex.value
-//   } else {
-//     if (
-//       Math.abs(activeIndex.value - idx - 12) >
-//       Math.abs(activeIndex.value - idx + 12)
-//     ) {
-//       step = idx - activeIndex.value - 12
-//     } else {
-//       step = idx - activeIndex.value + 12
-//     }
-//   }
-//   let stepCount = 0
-//   /** 点击执行旋转 */
-//   const clickMove = () => {
-//     if (stepCount < 15) {
-//       stepCount++
-//       vector.value += step * 2
-//       raf.value = requestAnimationFrame(clickMove)
-//     } else {
-//       cancelAnimationFrame(raf.value)
-//       clickAction.value = false
-//       activeIndex.value = idx
-//     }
-//   }
-//   raf.value = requestAnimationFrame(clickMove)
-// }
 onBeforeUnmount(() => cancelAnimationFrame(raf.value))
 </script>
 
@@ -337,7 +250,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
   position: relative;
   .flex-column;
   width: 3.75rem;
-  margin-top: 1.7rem;
+  margin-top: 1.8rem;
   .light {
     width: 1.84rem;
     height: 2.94rem;
@@ -351,7 +264,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
     position: relative;
     z-index: 4;
     transform: translateX(0.3rem);
-    height: 3.3rem;
+    height: 4.3rem;
     width: 3.75rem;
     perspective-origin: center;
     perspective: 4rem;
@@ -382,11 +295,13 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
         }
       }
 
-      @size: 3.3, 3.2, 2.07, 1.78, 3.47;
-      @x: 3.5, 1.5, 0, 0, 0.7;
-      @y: -1, 1.2, 0, 0, 0.2;
-      @z: 0, 0, 0, 0, 0;
-      @angle: 69, 67, 0, 0, 54;
+      @size: 3.3, 3.2, 2.07, 1.78, 2.97;
+      @x: 3.5, 1.5, 1.5, 1.5, 0.7;
+      @y: -1, 1.2, 0.5, 0.5, 0.16;
+      @z: 0, 0, 1, 1, 0;
+      @angle: 69, 67, 30, 30, 54;
+      @r5Top: 0.65rem;
+      @r5Left: -0.1rem;
 
       each(@size, {
         .ring@{index} {
@@ -394,7 +309,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
           transform: rotate3d(extract(@x, @index),
             extract(@y, @index),
             extract(@z, @index),
-            unit(extract(@angle, @index), deg)) if((@index =2), translate3d(.3rem, -.4rem, 0)) if((@index =5), translate3d(0rem, .4rem, -0)) if(not(@index =2) and not(@index =5), translateZ(0));
+            unit(extract(@angle, @index), deg)) if((@index =2), translate3d(.3rem, -.4rem, 0)) if((@index =5), translate3d(@r5Left,  @r5Top, 0)) if(not(@index =2) and not(@index =5), translateZ(0));
 
           > p {
             .rect(unit(@value, rem));
@@ -419,7 +334,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
             extract(@z, 5),
             unit(extract(@angle, 5), deg)
           )
-          translate3d(0rem, 0.4rem, 0);
+          translate3d(@r5Left, @r5Top, 0);
 
         > p {
           .rect(unit(extract(@size, 5), rem));
@@ -439,10 +354,11 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
         backface-visibility: hidden;
         content: '';
         .bg-normal('@/assets/bg/top-user-bottom.png');
-        width: 1.74rem;
-        height: 0.59rem;
+        width: 2.27rem;
+        height: 0.77rem;
+        transform: scale(0.9);
         .ab-X;
-        bottom: 0.76rem;
+        bottom: 0.7rem;
       }
 
       .avatar {
@@ -465,149 +381,11 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
         }
       }
     }
-
-    // .ball {
-    //   transform-style: preserve-3d;
-    //   user-select: none;
-
-    //   .size() {
-    //     .rect(0.7rem);
-    //   }
-
-    //   .size;
-    //   .ab-X;
-    //   top: 1rem;
-    //   // perspective: 2rem;
-    //   backface-visibility: hidden;
-
-    //   .ball-wrapper {
-    //     .size;
-    //     .flex-center;
-    //     position: relative;
-    //     transition: transform 0.3s;
-
-    //     // &::before {
-    //     //   content: '';
-    //     //   .size;
-    //     //   .bg-normal('@/assets/bg/bubble-skyblue.png');
-    //     //   .ab-center;
-    //     //   transform: translateZ(0.01rem);
-    //     // }
-
-    //     > p {
-    //       .flex-center;
-    //       font-size: 0.12rem;
-    //       color: #fff;
-    //       font-weight: 800;
-    //       filter: drop-shadow(0 0 .02rem #F96E1D);
-    //       .rect(0.44rem);
-    //       object-fit: contain;
-    //       transition: filter .3s;
-    //       transform-style: preserve-3d;
-    //       perspective: .2rem;
-    //       // transform: translateZ(0.01rem);
-    //       // .bg-normal('@/assets/icon/doubt-ball.png');
-    //     }
-    //   }
-    //   @keyframes word-jump {
-    //     0% {
-    //       transform: scaleX(1);
-    //     }
-    //     50% {
-    //       transform: translateY(.01rem) scaleX(.85);
-    //     }
-    //     100% {
-    //       transform: translateY(.02rem) scaleX(1);
-    //     }
-    //   }
-    //   each(range(12), {
-    //     &.ball-num@{value} {
-    //       .ball-wrapper {
-    //         > p {
-    //           animation: word-jump 1s linear @value * .2s infinite alternate;
-    //         }
-    //       }
-    //     }
-    //   })
-
-    //   &.active {
-    //     .ball-wrapper {
-    //       transform: scale(1.4);
-    //     }
-
-    //     // filter: drop-shadow(0 0 0.04rem #fff);
-    //   }
-    // }
   }
-  // .pointer-diamond {
-  //   position: absolute;
-  //   left: 1.82rem;
-  //   bottom: 0.32rem;
-  //   .flex-column;
-  //   z-index: 2;
-  //   perspective: 20rem;
-  //   transform-style: preserve-3d;
-  //   transform: rotate3d(1, 0, 0, 324deg);
-  //   .size() {
-  //     width: 0.2rem;
-  //     height: 0.4rem;
-  //   }
-  //   .diamond-wrapper {
-  //     position: relative;
-  //     transform-style: preserve-3d;
-  //     animation: diamond-roll 4s linear infinite;
-  //     @keyframes diamond-roll {
-  //       100% {
-  //         transform: rotateY(1turn);
-  //       }
-  //     }
-  //     .size;
-  //     .diamond-item {
-  //       .size;
-  //       .ab-center;
-  //     }
-  //   }
-  //   .diamond-upper {
-  //     .diamond-item {
-  //       transform-origin: bottom center;
-  //       clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  //       &:nth-child(1) {
-  //         transform: translateZ(0.1rem) rotateX(15deg);
-  //       }
-  //       &:nth-child(2) {
-  //         transform: translateX(0.1rem) rotateY(90deg) rotateX(15deg);
-  //       }
-  //       &:nth-child(3) {
-  //         transform: translateZ(-0.1rem) rotateX(-15deg);
-  //       }
-  //       &:nth-child(4) {
-  //         transform: translateX(-0.1rem) rotateY(-90deg) rotateX(15deg);
-  //       }
-  //     }
-  //   }
-  //   .diamond-under {
-  //     .diamond-item {
-  //       transform-origin: top center;
-  //       clip-path: polygon(50% 100%, 0 0, 100% 0);
-  //       &:nth-child(1) {
-  //         transform: translateZ(0.1rem) rotateX(-15deg);
-  //       }
-  //       &:nth-child(2) {
-  //         transform: translateX(0.1rem) rotateY(90deg) rotateX(-15deg);
-  //       }
-  //       &:nth-child(3) {
-  //         transform: translateZ(-0.1rem) rotateX(15deg);
-  //       }
-  //       &:nth-child(4) {
-  //         transform: translateX(-0.1rem) rotateY(-90deg) rotateX(-15deg);
-  //       }
-  //     }
-  //   }
-  // }
   .pointer-icon {
     position: absolute;
-    left: 1.8rem;
-    bottom: 0.35rem;
+    left: 1.52rem;
+    bottom: 0.6rem;
     z-index: 2;
     animation: pointer-move 0.8s linear infinite alternate;
     @keyframes pointer-move {
@@ -622,7 +400,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
   }
   .touch-zone {
     width: 3.75rem;
-    height: 1.2rem;
+    height: 1.4rem;
     .ab-X(2);
     opacity: 0;
     bottom: 0rem;
@@ -632,15 +410,15 @@ onBeforeUnmount(() => cancelAnimationFrame(raf.value))
     backface-visibility: hidden;
     position: absolute;
     z-index: 1;
-    left: 1.85rem;
-    top: 0.1rem;
+    left: 1.62rem;
+    top: -0.05rem;
 
     .size() {
-      .rect(4rem);
+      .rect(5.5rem);
     }
 
     .size;
-    transform: rotate3d(0.65, 0.12, 0, 55deg) translate(-50%, 0.1rem);
+    transform: rotate3d(0.65, 0.1, 0, 55deg) translate(-50%, 0);
     transform-style: preserve-3d;
 
     &::before {

@@ -1,7 +1,5 @@
 <template>
   <div class="Transfer">
-    <!-- 礼物展示 -->
-    <GiftShow />
     <!-- 演变区 -->
     <Lottery />
     <!-- 每日任务区 -->
@@ -10,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import GiftShow from './GiftShow/index.vue'
 import Lottery from './Lottery/index.vue'
 import Mission from './Mission/index.vue'
 </script>
@@ -18,6 +15,5 @@ import Mission from './Mission/index.vue'
 <style scoped lang="less">
 .Transfer {
   position: relative;
-  .flex-column;
 }
 </style>

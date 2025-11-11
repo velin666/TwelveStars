@@ -1,5 +1,7 @@
 <template>
   <div class="Rank">
+    <!-- 礼物展示 -->
+    <div class="gift-show"></div>
     <CommonFrame class="rank-zone" :title="tabIndex === 1 ? 'person-rank' : 'room-rank'">
       <div v-if="tabIndex === 2 && roomBaseInfo.dataId" class="self-room-info">
         <div class="base-tips">
@@ -210,12 +212,26 @@ const bulletSending = () => {
 <style scoped lang="less">
 .Rank {
   position: relative;
-  .flex-column;
+  .gift-show {
+    width: 4.03rem;
+    height: 3.88rem;
+    position: relative;
+    .bg-normal('@/assets/bg/gift-main.png');
+    &::before {
+      content: '';
+      .ab-X;
+      top: 0;
+      width: 1.69rem;
+      height: 0.56rem;
+      .bg-normal('@/assets/text/gift-title.png');
+    }
+  }
   .rank-zone {
+    margin-top: 0.2rem;
     .self-room-info {
       .flex-column;
       .base-tips {
-        margin-top: 0.2rem;
+        margin-top: 0.7rem;
         width: 2.17rem;
         height: 0.14rem;
         .flex-center;
@@ -246,7 +262,7 @@ const bulletSending = () => {
         }
       }
       .self-info {
-        margin-top: 0.09rem;
+        margin-top: 0.15rem;
         position: relative;
         width: 2.65rem;
         height: 0.79rem;
@@ -369,7 +385,7 @@ const bulletSending = () => {
     .flex-column;
     .tab-bar {
       .flex-center;
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
       .tab-personal {
         .bg-normal('@/assets/tab/rank-tab-bg.png');
         position: relative;
@@ -501,9 +517,9 @@ const bulletSending = () => {
     .tab-zone {
       .flex-center;
       margin-top: 0.2rem;
-      width: 2.94rem;
-      height: 0.44rem;
-      .bg-normal('@/assets/bg/tab-dark-bg.png');
+      width: 3.2rem;
+      height: 0.61rem;
+      .bg-normal('@/assets/bg/tab-dark-bg.png', 100% 100%);
       .tab-bar {
         margin: 0 0.03rem;
         width: 1.39rem;

@@ -35,6 +35,12 @@ interface IBulletInfo extends IBulletItem {
  * 初始化
  */
 const { stopPlay } = defineProps<{ stopPlay: boolean }>()
+const emit = defineEmits<{
+  /**
+   * 弹幕可见性变化：true 表示当前有弹幕在屏幕上
+   */
+  (e: 'active-change', value: boolean): void
+}>()
 const { setBullet, selfBulletItem } = toRefs(useBullet())
 
 /**  */
@@ -82,7 +88,7 @@ const bulletCycle = () => {
       bulletTimer.value = setTimeout(() => {
         bulletIndex.value = -1
         getBulletInfo()
-      }, 5000)
+      }, 10000)
     }
   }, 2000)
 }
@@ -98,6 +104,21 @@ const bulletOption = (id?: string): void => {
     stopId.value = ''
   }
 }
+
+/**
+ * 当前屏幕是否存在弹幕，发出事件通知父级
+ */
+watch(
+  () => bulletInfo.value.length,
+  (len, prev) => {
+    if (len === 0 && prev !== 0) {
+      emit('active-change', false)
+    } else if (len > 0 && prev === 0) {
+      emit('active-change', true)
+    }
+  },
+  { immediate: false },
+)
 
 watch(
   () => selfBulletItem.value,
@@ -155,7 +176,7 @@ document.addEventListener('visibilitychange', checkViChange)
     height: 0.28rem;
     position: absolute;
     right: 0;
-    animation: bullet-move 12s linear 1 both;
+    animation: bullet-move 9s linear 1 both;
     pointer-events: initial;
     height: 0.28rem;
     user-select: none;

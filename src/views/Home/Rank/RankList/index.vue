@@ -224,7 +224,9 @@ const getRankInfo = () =>
 
 getRankInfo()
 
-const toRoom = (id: number) => {}
+const toRoom = (id: number) => {
+  showToast('模拟跳转房间打榜~')
+}
 
 /**
  * 弹框
@@ -477,6 +479,7 @@ const sending = () => {
       }
     }
     .table-list {
+      margin-top: 0.2rem;
       .table-item {
         width: 3.15rem;
         height: 0.97rem;
@@ -577,7 +580,7 @@ const sending = () => {
       }
     }
     .Pagination {
-      margin: 0.2rem 0;
+      margin: 0.2rem 0 0.65rem;
       .btn {
         opacity: 0.5;
         .btn-wrap {
